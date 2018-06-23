@@ -16,12 +16,32 @@ namespace Function
 		public void Handle(string input)
 		{
 			string URLTemplate="{0}/rest/api/2/issue/{1}/comment";
-			string jiraURL=File.ReadAllText("/var/openfaas/secrets/JIRA-URL");
-			string jiraUser=File.ReadAllText("/var/openfaas/secrets/JIRA-USER");
-			string jiraPassword=File.ReadAllText("/var/openfaas/secrets/JIRA-PASSWORD");
-			WebClient wc=new WebClient();
-			Comment cm=JsonConvert.DeserializeObject<Comment>(input);
+			string jiraURL;
+			string jiraUser;
+			string jiraPassword;
+			Comment cm=new Comment();
+			try
+			{
+				cm=JsonConvert.DeserializeObject<Comment>(input);
+				if(cm==null)throw new SystemException("Null parameter");
+			}
+			catch (Exception ex)
+			{
+				throw new SystemException("Error. Parsign parameter: "+ex.Message);
+			}
 
+			try
+			{
+				jiraURL=File.ReadAllText("/var/openfaas/secrets/JIRA-URL");
+				jiraUser=File.ReadAllText("/var/openfaas/secrets/JIRA-USER");
+				jiraPassword=File.ReadAllText("/var/openfaas/secrets/JIRA-PASSWORD");
+			}
+			catch (Exception ex)
+			{
+				throw new SystemException("Error. You might not have the secrets: "+ex.Message);
+			}
+			WebClient wc=new WebClient();
+			
 			string svcCredentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(jiraUser + ":" + jiraPassword));
 
 			wc.Headers.Add("Authorization", "Basic " + svcCredentials);
