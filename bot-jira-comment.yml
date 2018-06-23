@@ -1,0 +1,13 @@
+provider:
+  name: faas
+  gateway: http://127.0.0.1:8080
+
+functions:
+  bot-jira-comment:
+    lang: csharp
+    handler: ./bot-jira-comment
+    image: ngcdev/ci:bot-jira-comment
+    secrets:
+      - JIRA-URL
+      - JIRA-USER
+      - JIRA-PASSWORD
