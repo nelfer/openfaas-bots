@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using System.Linq;
-using System.Net;
+
 
 namespace Function
 {
@@ -16,6 +14,7 @@ namespace Function
 	{
 		public void Handle(string input)
 		{
+			Request.SetContext(input);
 			string[] possibilities=
 			{
 				"It is certain :+1:",
@@ -61,20 +60,21 @@ namespace Function
 				"Seriously? No :-1:",
 				"Nah :-1:"
 			};
-			Dictionary<string,string> Form=new Dictionary<string,string>();
-			input.Split('&').ToList().ForEach(li=>Form.Add(li.Split('=')[0],WebUtility.UrlDecode(li.Split('=')[1])));
+			
 			Random rnd=new Random();
 			string Format="#### Question: {0}\n___\nMagicBall says: {1}";
 			MessageFormat msg=new MessageFormat();
 			
-			string question=Form["text"];
-			if(String.IsNullOrEmpty(question))
-				question="What is this?";
-
 			string answer=possibilities[rnd.Next(possibilities.Length)];
+			string question=Request.Form["text"];
+			if(String.IsNullOrEmpty(question))
+			{
+				question="What is this?";
+				answer="I can answer all of your questions";
+			}
 			
 			msg.text=String.Format(Format,question,answer);
-			msg.username=Form["user_name"];
+			msg.username=Request.Form["user_name"];
 
 			Console.WriteLine(JsonConvert.SerializeObject(msg));
 		}
