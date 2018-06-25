@@ -1,0 +1,13 @@
+provider:
+  name: faas
+  gateway: http://127.0.0.1:8080
+
+functions:
+  bot-flip-coin:
+    lang: csharp
+    handler: ./bot-flip-coin
+    image: ngcdev/ci:bot-flip-coin
+    environment:
+      content_type: application/json
+
+

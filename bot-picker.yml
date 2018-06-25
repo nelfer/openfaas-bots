@@ -1,0 +1,11 @@
+provider:
+  name: faas
+  gateway: http://127.0.0.1:8080
+
+functions:
+  bot-picker:
+    lang: csharp
+    handler: ./bot-picker
+    image: ngcdev/ci:bot-picker
+    environment:
+      content_type: application/json
