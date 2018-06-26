@@ -30,7 +30,7 @@ namespace Function
 			string url=String.Format("https://appear.in/{0}{1}-{2}",prefix,Constants.Adjectives[randAdjective],Constants.Animals[randAnimal]);
 			msg.text=String.Format(ret,url);
 			msg.username=Request.Form["user_name"];
-			msg.goto_location=url;
+			//msg.goto_location=url;
 			Console.WriteLine(JsonConvert.SerializeObject(msg));
 		}
 	}
