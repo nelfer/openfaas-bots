@@ -17,14 +17,12 @@ namespace Function
 	{
 		public void Handle(string input)
 		{
+			Request.SetContext(input);
 			MattermostMessage ret=new MattermostMessage();
-			input=input.Replace("\n","").Replace("\r","");
-			Dictionary<string,string> Form=new Dictionary<string, string>();
-			input.Split('&').ToList().ForEach(li=>Form.Add(li.Split('=')[0],WebUtility.UrlDecode(li.Split('=')[1])));
-			
+	
 			Random rnd=new Random((int)DateTime.Now.Ticks);
 			string list;
-			list = Form["text"]??"nothing";
+			list = Request.Form["text"]??"nothing";
 			List<string> vals=new List<string>(list.Split(','));
 
 			int val0=rnd.Next(0,vals.Count);

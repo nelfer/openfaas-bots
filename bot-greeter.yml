@@ -3,9 +3,9 @@ provider:
   gateway: http://127.0.0.1:8080
 
 functions:
-  ngchelloworld:
+  bot-greeter:
     lang: csharp
-    handler: ./ngchelloworld
+    handler: ./bot-greeter
     image: ngcdev/ci:bot-greeter
     environment:
       content_type: application/json

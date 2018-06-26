@@ -12,6 +12,6 @@ static public class Request
 	{
 		string qse=Environment.GetEnvironmentVariable("Http_Query")??"";
 		qse.Split('&').ToList().ForEach(li=>{string[] parts=li.Split('=');QueryString.Add(parts[0],parts.Length==2?WebUtility.UrlDecode(li.Split('=')[1]):null);});
-		input.Split('&').ToList().ForEach(li=>{string[] parts=li.Split('=');Form.Add(parts[0],parts.Length==2?WebUtility.UrlDecode(li.Split('=')[1]):null);});
+		input.Replace("\n","").Replace("\r","").Split('&').ToList().ForEach(li=>{string[] parts=li.Split('=');Form.Add(parts[0],parts.Length==2?WebUtility.UrlDecode(li.Split('=')[1]):null);});
 	}
 }

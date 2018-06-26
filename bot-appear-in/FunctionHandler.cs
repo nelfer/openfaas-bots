@@ -8,6 +8,7 @@ namespace Function
 		public string username{get;set;}="Appear.in";
 		public string response_type {get;set;}="in_channel";
 		public string text{get;set;}="";
+		public string goto_location { get; set; }
 	}
 	public class FunctionHandler
 	{		
@@ -20,15 +21,16 @@ namespace Function
 
 			int randAnimal=rnd.Next(Constants.Animals.Length);
 			int randAdjective=rnd.Next(Constants.Adjectives.Length);
-			string ret="Has started a video conference in room: {3}{2}{0}-{1}";
+			string ret="Has started a video conference in room: {0}";
 			
 			string prefix=Request.QueryString["prefix"];
 			if(!String.IsNullOrEmpty(prefix))
 				prefix+="-";
 
-			msg.text=String.Format(ret,Constants.Adjectives[randAdjective],Constants.Animals[randAnimal],prefix,"https://appear.in/");
+			string url=String.Format("https://appear.in/{0}{1}-{2}",prefix,Constants.Adjectives[randAdjective],Constants.Animals[randAnimal]);
+			msg.text=String.Format(ret,url);
 			msg.username=Request.Form["user_name"];
-
+			msg.goto_location=url;
 			Console.WriteLine(JsonConvert.SerializeObject(msg));
 		}
 	}

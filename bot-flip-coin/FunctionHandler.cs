@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,15 +16,19 @@ namespace Function
 	{
 		public void Handle(string input)
 		{
+			int totalThrows=5;
 			MattermostMessage ret=new MattermostMessage();
 			Random rnd=new Random((int)DateTime.Now.Ticks);
-
-			int val0=rnd.Next(0,100);
-			int val1=rnd.Next(0,100);
-			int val2=rnd.Next(0,100);
-			ret.text=String.Format("Flip 1 is: {0}",val0<50?"Tails":"Heads");
-			ret.text+=String.Format("\nFlip 2 is: {0}",val1<50?"Tails":"Heads");
-			ret.text+=String.Format("\nFlip 3 is: {0}",val2<50?"Tails":"Heads");
+			List<string> throws=new List<string>();
+			for (int cni = 0; cni < totalThrows; cni++)
+			{
+				throws.Add(rnd.Next(100)<50?"Tails":"Heads");
+			}
+			for (int pni = 0; pni < throws.Count; pni++)
+			{
+				ret.text+=String.Format("Flip {0} is: {1}\n",pni+1,throws[pni]);
+			}
+			ret.text+=String.Format("\n**{0} wins!**",throws.Count(it=>it=="Tails")>totalThrows/2?"Tails":"Heads");
 			Console.WriteLine(JsonConvert.SerializeObject(ret));
 		}
 	}

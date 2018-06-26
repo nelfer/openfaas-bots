@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Text;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 
 namespace Function
 {
@@ -17,6 +14,7 @@ namespace Function
 	{
 		public void Handle(string input)
 		{
+			Request.SetContext(input);
 			List<string> greets=new List<string>
 			{
 				"Hello {0}! Welcome to {1}",
@@ -29,10 +27,7 @@ namespace Function
 			};
 			Random rnd=new Random((int)DateTime.Now.Ticks);
 			int pos=rnd.Next(0,greets.Count);
-			input=input.Replace("\n","").Replace("\r","");
-			Dictionary<string,string> Form=new Dictionary<string, string>();
-			input.Split('&').ToList().ForEach(li=>Form.Add(li.Split('=')[0],WebUtility.UrlDecode(li.Split('=')[1])));
-			MattermostMessage ret=new MattermostMessage{text=String.Format(greets[pos],Form["user_name"],Form["channel_name"])};
+			MattermostMessage ret=new MattermostMessage{text=String.Format(greets[pos],Request.Form["user_name"],Request.Form["channel_name"])};
 			Console.WriteLine(JsonConvert.SerializeObject(ret));
 		}
 	}

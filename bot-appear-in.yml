@@ -7,3 +7,5 @@ functions:
     lang: csharp
     handler: ./bot-appear-in
     image: ngcdev/ci:bot-appear-in
+    environment:
+      content_type: application/json
