@@ -40,7 +40,7 @@ namespace Function
 			{
 				string nl=fi;
 				if(fi.StartsWith("A   "))nl=fi.Replace("A   ","- (+) Added   ");
-				if(fi.StartsWith("U   "))nl=fi.Replace("U   ","- (/) Udated  ");
+				if(fi.StartsWith("U   "))nl=fi.Replace("U   ","- (/) Updated  ");
 				if(fi.StartsWith("D   ")){nl=fi.Replace("D   ","- {color:red}(x) Deleted ");nl+="{color}";}
 				result+=nl+"\n";
 			});
