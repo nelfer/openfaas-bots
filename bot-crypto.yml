@@ -1,0 +1,9 @@
+provider:
+  name: faas
+  gateway: http://127.0.0.1:8080
+
+functions:
+  bot-crypto:
+    lang: csharp
+    handler: ./bot-crypto
+    image: ngcdev/ci:bot-crypto
