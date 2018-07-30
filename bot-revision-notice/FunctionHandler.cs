@@ -14,8 +14,8 @@ namespace Function
 			string delimiter="SVNDELIMITERTEXT---- ";
 			List<string> segments=new List<string>(input.Split(new string[] { delimiter }, StringSplitOptions.None));
 			string comment=segments[3];
-			string issue=cleanUp(getIssue(comment));
-			if(issue!=null)
+			List<string> issues=getIssues(comment);
+			if(issues.Count>0)
 			{
 				string system=cleanUp(segments[0]);
 				string revision=cleanUp(segments[1]).Trim();
@@ -24,7 +24,7 @@ namespace Function
 				string commentHeader="{panel:title=Comment|borderStyle=dashed|borderColor=#ccc|titleBGColor=#F7D6C1|bgColor=#FFFFCE}";
 				string commentFooter="{panel}";
 				string RevisionText=String.Format("{0} Revision *{1}* by {2}.\n{5}{3}{6}\nFiles:\n{4}",system,revision,author,comment,files,commentHeader,commentFooter);
-				PostToJira(issue,RevisionText);
+				issues.ForEach(issue=>PostToJira(issue,RevisionText));
 				System.Console.WriteLine("Posted");
 			}
 			else
@@ -60,19 +60,15 @@ namespace Function
 		{
 			return _toClean!=null?_toClean.Replace("\n","").Replace("\r",""):_toClean;
 		}
-		string getIssue(string _comment)
+		List<string> getIssues(string _comment)
 		{
-			string ret=null;
-			string input=" "+_comment.Replace("\n"," ").Replace("\r"," ").Replace(":"," ").ToUpper()+" ";
+			List<string> ret=new List<string>();
+			string input=cleanUp(_comment).Replace(":"," ").ToUpper();
 			List<string> words=new List<string>(input.Split(' '));
-			string ga=words.FirstOrDefault(item=>item.StartsWith("GA-"));
-			string fw=words.FirstOrDefault(item=>item.StartsWith("FRWK-"));
-			int gpos=32000;
-			int fpos=32000;
-			if(ga!=null)gpos=words.IndexOf(ga);
-			if(fw!=null)fpos=words.IndexOf(fw);
-			if(gpos<fpos)ret=ga;
-			if(fpos<gpos)ret=fw;
+			List<string> ga=words.Where(item=>item.StartsWith("GA-")).ToList();
+			List<string> fw=words.Where(item=>item.StartsWith("FRWK-")).ToList();
+			if(ga.Count>0)ret.AddRange(ga);
+			if(fw.Count>0)ret.AddRange(fw);
 			return ret;
 		}
 	}
