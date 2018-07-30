@@ -48,11 +48,13 @@ namespace Function
 		}
 		void PostToJira(string issue,string comment)
 		{
-			WebClient wc=new WebClient();
-			Comment cm=new Comment();
-			cm.issue=issue;
-			cm.body=comment;
-			wc.UploadString("http://gateway:8080/function/bot-jira-comment",JsonConvert.SerializeObject(cm));
+			using(WebClient wc=new WebClient())
+			{
+				Comment cm=new Comment();
+				cm.issue=issue;
+				cm.body=comment;
+				wc.UploadString("http://gateway:8080/function/bot-jira-comment",JsonConvert.SerializeObject(cm));
+			}
 		}
 		string cleanUp(string _toClean)
 		{
