@@ -17,10 +17,10 @@ namespace Function
 			Request.SetContext(input);
 			
 			Dictionary<string,List<string>> responses=new Dictionary<string,List<string>>();
-			responses.Add("greets",new List<string>{"Hello {0}! Welcome to {1}","Hey {0}! What brings you to {1}?","This is {1}. We've been expecting you {0}","Sup {0}?","Mi casa ({1}) es su casa {0}","The people of {1} greet you {0}","Welcome to Walmart... **ahem** I mean {1}."});
+			responses.Add("greets",new List<string>{"Hello {0}! Welcome to {1}","Hey {0}! What brings you to {1}?","This is {1}. We've been expecting you {0}","Sup {0}?","Mi casa ({1}) es su casa {0}","The people of {1} greet you {0}","Welcome to Walmart... **ahem** I mean {1}.","Top of the morning!","Good day to you sir!..or madam? I really don't know what you are {0}","Hola {0}","Salutations!"});
 			responses.Add("laughs",new List<string>	{"hahaha!","LOL that's funny","jajajajaja siii","ROFL","haha good one","That's really funny {0}"});
 			responses.Add("questions",new List<string>	{"what?","How? I don't know...","Why?","When?","That is the question {0}!"});
-			responses.Add("thanks",new List<string>	{"You're welcome","No problem","De nada","Don't mention it"});
+			responses.Add("thanks",new List<string>	{"You're welcome","No problem","De nada","Don't mention it","No, thank you!","You thank me, I thank you. It's a thank you loop","You got it!"});
 			string type=(Request.QueryString["type"]??"greets").ToLower();
 			if(!responses.ContainsKey(type))
 				type="greets";
