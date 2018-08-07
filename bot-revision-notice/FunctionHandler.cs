@@ -58,7 +58,7 @@ namespace Function
 		}
 		string cleanUp(string _toClean)
 		{
-			return _toClean!=null?_toClean.Replace("\n","").Replace("\r",""):_toClean;
+			return _toClean!=null?_toClean.Replace("\n"," ").Replace("\r"," "):_toClean;
 		}
 		List<string> getIssues(string _comment)
 		{

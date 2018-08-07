@@ -7,7 +7,5 @@ functions:
     lang: csharp
     handler: ./bot-revision-process
     image: ngcdev/ci:bot-revision-process
-    environment:
-      content_type: application/json
-      write_debug: true
+
 
