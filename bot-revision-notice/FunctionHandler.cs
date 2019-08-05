@@ -17,13 +17,13 @@ namespace Function
 			List<string> issues=getIssues(comment);
 			if(issues.Count>0)
 			{
-				string system=cleanUp(segments[0]);
+				string system=cleanUp(segments[0]).Trim();
 				string revision=cleanUp(segments[1]).Trim();
 				string author=cleanUp(segments[2]);
 				string files=procFiles(segments[4]);
 				string commentHeader="{panel:title=Comment|borderStyle=dashed|borderColor=#ccc|titleBGColor=#F7D6C1|bgColor=#FFFFCE}";
 				string commentFooter="{panel}";
-				string RevisionText=String.Format("{0} Revision *{1}* by {2}.\n{5}{3}{6}\nFiles:\n{4}",system,revision,author,comment,files,commentHeader,commentFooter);
+				string RevisionText=String.Format("{0} Revision *{1}* by {2}.\nDetails: https://ngcsvn1.ngcsoftware.com/!/#{0}/commit/r{1}\n\n{5}{3}{6}\nFiles:\n{4}",system,revision,author,comment,files,commentHeader,commentFooter);
 				issues.ForEach(issue=>PostToJira(issue,RevisionText));
 				System.Console.WriteLine("Posted");
 			}
