@@ -30,10 +30,35 @@ namespace Function
 				//TODO: Post to database verification
 				System.Console.WriteLine("Will do some database thing");
 			}
-			if(files.Contains("trunk/")&&(system.Contains("Framework")||system.Contains("e-SPS")))
+			if((system.Contains("Framework")||system.Contains("eSPS")))
 			{
-				//TODO: Post to compilation
-				System.Console.WriteLine("Will compile");
+				string systemName="Framework";
+				string branch="Trunk";
+				string token="eAwmnJSxBzsfuvATz6yv";
+				if(system.Contains("eSPS"))
+				{
+					systemName="Andromeda";
+				}
+				List<string> fl = new List<string>(files.Replace("\r", "").Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
+				string first = fl[0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[1];
+				string segment = first.Split('/')[0];
+				if(segment!="trunk")
+				{
+					segment = first.Split('/')[1];
+					branch=segment;
+				}
+				//Need to initiate compilation of any branch or trunk
+				WebClient wc=new WebClient();
+				try
+				{
+					wc.DownloadData(String.Format("http://ngcjenkinsdev.eastus.cloudapp.azure.com/job/{0}.{1}-build/build?token={2}",systemName,branch,token));
+					System.Console.WriteLine("Will compile");
+				}
+				catch (System.Exception)
+				{
+					System.Console.WriteLine("Probably Jenkins Project doesn't exist");
+				}
+				System.Console.WriteLine("We post a comment in Jira");
 			}
 			System.Console.WriteLine("Done");
 		}
