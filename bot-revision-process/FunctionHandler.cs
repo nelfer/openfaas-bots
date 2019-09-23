@@ -22,8 +22,16 @@ namespace Function
 			if(hasIssue)
 			{
 				WebClient wc=new WebClient();
-				wc.UploadData("http://gateway:8080/function/bot-revision-notice", Encoding.UTF8.GetBytes(input));
-				System.Console.WriteLine("We post a comment in Jira");
+				try
+				{
+					wc.UploadData("http://gateway:8080/function/bot-revision-notice", Encoding.UTF8.GetBytes(input));
+					System.Console.WriteLine("We post a comment in Jira");
+				}
+				catch
+				{
+					System.Console.WriteLine("Unable to post to Jira");
+				}
+				
 			}
 			if(files.Contains("/Database/"))
 			{
