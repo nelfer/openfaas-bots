@@ -46,8 +46,15 @@ namespace Function
 
 			wc.Headers.Add("Authorization", "Basic " + svcCredentials);
 			wc.Headers.Add("Content-Type","application/json");
-			wc.UploadString(String.Format(URLTemplate,jiraURL,cm.issue),JsonConvert.SerializeObject(cm));
-
+			try
+			{
+				wc.UploadString(String.Format(URLTemplate,jiraURL,cm.issue),JsonConvert.SerializeObject(cm));
+			}
+			catch (System.Exception ex)
+			{
+				System.Console.WriteLine("Error sending request: {0}\n\n{1}",ex.Message,ex.StackTrace);
+			}
+			
 			Console.WriteLine("Your comment posted. I think.");
 		}
 	}
