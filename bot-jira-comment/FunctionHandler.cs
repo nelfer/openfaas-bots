@@ -46,6 +46,8 @@ namespace Function
 
 			wc.Headers.Add("Authorization", "Basic " + svcCredentials);
 			wc.Headers.Add("Content-Type","application/json");
+			// TODO: Remove next line once Jira certificate works
+			ServicePointManager.ServerCertificateValidationCallback = (a, b, c, d) => true;
 			try
 			{
 				wc.UploadString(String.Format(URLTemplate,jiraURL,cm.issue),JsonConvert.SerializeObject(cm));
