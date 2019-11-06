@@ -7,6 +7,7 @@ public class TfsAuthor
 
 public class TfsGitCommit
 {
+	public string commitId { get; set; }
 	public string comment { get; set; }
 	public string url {get;set;}
 	public TfsAuthor author { get; set; }
@@ -16,6 +17,7 @@ public class TfsRepository
 {
 	public string id { get; set; }
 	public string name { get; set; }
+	public string remoteUrl { get; set; }
 }
 public class TfsResource
 {

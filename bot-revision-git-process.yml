@@ -7,3 +7,6 @@ functions:
     lang: csharp
     handler: ./bot-revision-git-process
     image: ngcdev/ci:bot-revision-git-process
+    environment:
+      write_debug: true
+      content_type: text/plain
