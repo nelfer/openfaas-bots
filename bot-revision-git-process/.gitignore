@@ -3,6 +3,3 @@ obj/
 .nuget/
 .dotnet/
 .templateengine/
-
-template
-build

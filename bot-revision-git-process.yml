@@ -1,0 +1,9 @@
+provider:
+  name: faas
+  gateway: http://127.0.0.1:8080
+
+functions:
+  bot-revision-git-process:
+    lang: csharp
+    handler: ./bot-revision-git-process
+    image: ngcdev/ci:bot-revision-git-process
