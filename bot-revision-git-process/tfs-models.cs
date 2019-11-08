@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 public class TfsAuthor
 {
 	public string name { get; set; }
 	public string email { get; set; }
+	public DateTime date { get; set; }
 }
 
 public class TfsGitCommit
