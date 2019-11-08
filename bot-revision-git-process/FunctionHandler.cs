@@ -47,7 +47,7 @@ namespace Function
 
 						using(WebClient wc=new WebClient())
 						{
-							wc.UploadDataAsync(new Uri("http://gateway:8080/function/bot-revision-process"),Encoding.UTF8.GetBytes(message));
+							wc.UploadData("http://gateway:8080/function/bot-revision-process",Encoding.UTF8.GetBytes(message));
 						}
 						System.Console.WriteLine("Posted this: \n{0}",message);
 					}
