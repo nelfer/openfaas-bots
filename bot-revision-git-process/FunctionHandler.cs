@@ -26,10 +26,14 @@ namespace Function
 				string messageFormat="{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}";
 				post.resource.commits.ForEach(x=>
 				{
+					string message=null;
 					try
 					{
-						string message=String.Format(messageFormat,
-							post.resource.repository.name,
+						string branch=post.resource.repository.defaultBranch;
+						branch=branch.Substring(branch.LastIndexOf('/')+1);
+						string repo=String.Format("{0}.{1}",post.resource.repository.name,branch);
+						message=String.Format(messageFormat,
+							repo,
 							delimiter,
 							String.Format("{0}/commit/{1}",post.resource.repository.remoteUrl,x.commitId),
 							delimiter,
@@ -39,15 +43,16 @@ namespace Function
 							delimiter,
 							""
 						);
+
 						using(WebClient wc=new WebClient())
 						{
-							Uri endpoint=new Uri("http://gateway:8080/function/bot-revision-process");
-							wc.UploadDataAsync(endpoint,Encoding.UTF8.GetBytes(message));
+							wc.UploadData("http://gateway:8080/function/bot-revision-process",Encoding.UTF8.GetBytes(message));
 						}
+						System.Console.WriteLine("Posted this: \n{0}",message);
 					}
 					catch(Exception ex)
 					{
-						Console.Write("Failed to process commit: {0}",ex.Message);
+						Console.Write("Failed to process commit: {0}\nMessage Posted:\n {1}",ex.Message,message);
 					}
 				});
 			}

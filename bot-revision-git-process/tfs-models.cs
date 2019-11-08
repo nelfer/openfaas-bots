@@ -18,6 +18,7 @@ public class TfsRepository
 	public string id { get; set; }
 	public string name { get; set; }
 	public string remoteUrl { get; set; }
+	public string defaultBranch { get; set; }
 }
 public class TfsResource
 {

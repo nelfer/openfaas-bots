@@ -20,10 +20,10 @@ namespace Function
 				string system=cleanUp(segments[0]).Trim();
 				string revisionURL=cleanUp(segments[1]).Trim();
 				string author=cleanUp(segments[2]);
-				string files=procFiles(segments[4]);
+				string files=procFiles(segments.Count>=5?segments[4]:"");
 				string commentHeader="{panel:title=Comment|borderStyle=dashed|borderColor=#ccc|titleBGColor=#F7D6C1|bgColor=#FFFFCE}";
 				string commentFooter="{panel}";
-				string RevisionText=String.Format("{0} Revision/Push by {2}.\nDetails: {1}\n\n{5}{3}{6}\nFiles:\n{4}",system,revisionURL,author,comment,files,commentHeader,commentFooter);
+				string RevisionText=String.Format("Update to: {0}\nRevision/Push by {2}.\nDetails: {1}\n\n{5}{3}{6}\nFiles:\n{4}",system,revisionURL,author,comment,files,commentHeader,commentFooter);
 				issues.ForEach(issue=>PostToJira(issue,RevisionText));
 				System.Console.WriteLine("Posted");
 			}
@@ -34,16 +34,19 @@ namespace Function
 
 		string procFiles(string _files)
 		{
-			List<string> files=new List<string>(_files.Split(new string[] { "\n" },StringSplitOptions.RemoveEmptyEntries));
 			string result="";
-			files.ForEach(fi=>
+			if(!String.IsNullOrEmpty(_files))
 			{
-				string nl=fi;
-				if(fi.StartsWith("A   "))nl=fi.Replace("A   ","- (+) Added   ");
-				if(fi.StartsWith("U   "))nl=fi.Replace("U   ","- (/) Updated  ");
-				if(fi.StartsWith("D   ")){nl=fi.Replace("D   ","- {color:red}(x) Deleted ");nl+="{color}";}
-				result+=nl+"\n";
-			});
+				List<string> files=new List<string>(_files.Split(new string[] { "\n" },StringSplitOptions.RemoveEmptyEntries));
+				files.ForEach(fi=>
+				{
+					string nl=fi;
+					if(fi.StartsWith("A   "))nl=fi.Replace("A   ","- (+) Added   ");
+					if(fi.StartsWith("U   "))nl=fi.Replace("U   ","- (/) Updated  ");
+					if(fi.StartsWith("D   ")){nl=fi.Replace("D   ","- {color:red}(x) Deleted ");nl+="{color}";}
+					result+=nl+"\n";
+				});
+			}
 			return result;
 		}
 		void PostToJira(string issue,string comment)

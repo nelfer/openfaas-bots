@@ -10,3 +10,5 @@ functions:
     environment:
       write_debug: true
       content_type: text/plain
+      read_timeout: 20s
+      write_timeout: 20s
