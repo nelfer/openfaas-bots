@@ -38,7 +38,7 @@ namespace Function
 				//TODO: Post to database verification
 				System.Console.WriteLine("Will do some database thing");
 			}
-			if((system.Contains("Framework")||system.Contains("eSPS")))
+			if((system.Contains("Framework")||system.Contains("eSPS")||system.Contains("Andromeda")))
 			{
 				string systemName="Framework";
 				string branch="Trunk";
