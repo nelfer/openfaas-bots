@@ -17,7 +17,7 @@ namespace Function
 			List<string> segments=new List<string>(input.Split(new string[] { delimiter }, StringSplitOptions.None));
 			string comment=(segments[3]??"").ToUpper();
 			string system=segments[0];
-			bool hasIssue=comment.Contains("GA-")||comment.Contains("FRWK-");
+			bool hasIssue=comment.Contains("GA-")||comment.Contains("FRWK-")||comment.Contains("DEV-");
 			string files=segments.Count>=5?segments[4]:"";
 			if(hasIssue)
 			{

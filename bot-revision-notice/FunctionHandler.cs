@@ -70,8 +70,10 @@ namespace Function
 			List<string> words=new List<string>(input.Split(' '));
 			List<string> ga=words.Where(item=>item.StartsWith("GA-")).ToList();
 			List<string> fw=words.Where(item=>item.StartsWith("FRWK-")).ToList();
+			List<string> de=words.Where(item=>item.StartsWith("DEV-")).ToList();
 			if(ga.Count>0)ret.AddRange(ga);
 			if(fw.Count>0)ret.AddRange(fw);
+			if(de.Count>0)ret.AddRange(de);
 			return ret;
 		}
 	}
