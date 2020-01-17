@@ -22,12 +22,17 @@ namespace Function
 	{
 		public string customfield_11700 { get; set; }
 	}
+
+	public class BodyUpdate
+	{
+		public RevField fields { get; set; }
+	}
 	public class FunctionHandler
 	{
 		public void Handle(string input)
 		{
 			string URLTemplate="{0}/rest/api/2/issue/{1}/comment";
-			string UpdateURLTemplate="{0}/rest/api/latest/issue/{1}/";
+			string UpdateURLTemplate="{0}/rest/api/2/issue/{1}";
 
 			string jiraURL;
 			string jiraUser;
@@ -56,7 +61,7 @@ namespace Function
 			WebClient wc=new WebClient();
 			
 			string svcCredentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(jiraUser + ":" + jiraPassword));
-
+			wc.Encoding=Encoding.UTF8;
 			wc.Headers.Add("Authorization", "Basic " + svcCredentials);
 			wc.Headers.Add("Content-Type","application/json");
 			try
@@ -71,16 +76,31 @@ namespace Function
 			
 			if(!String.IsNullOrEmpty(cm.revision))
 			{
-				RevField data=new RevField{customfield_11700=cm.revision};
+				WebClient wc2=new WebClient();
+				wc2.Encoding=Encoding.UTF8;
+				wc2.Headers.Add("Authorization", "Basic " + svcCredentials);
+				wc2.Headers.Add("Content-Type","application/json");
+				BodyUpdate data=new BodyUpdate();
+				data.fields=new RevField{customfield_11700=cm.revision};
+				string result="None";
+				string urlUpdate=String.Format(UpdateURLTemplate,jiraURL,cm.issue);
+				string JsonData=JsonConvert.SerializeObject(data);
 				try
 				{
-					string proj=cm.issue.Split('-')[0];
-					wc.Headers.Add("Project",proj);
-					wc.UploadString(String.Format(UpdateURLTemplate,jiraURL,cm.issue),"PUT",JsonConvert.SerializeObject(data));
+					result=wc2.UploadString(urlUpdate,"PUT",JsonData);
+				}
+				catch (WebException ex)
+				{
+					if (ex.Response != null)
+					{ 
+						string response = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+						Console.WriteLine("Response: {0}",response);
+					}
 				}
 				catch (System.Exception ex)
 				{
-					System.Console.WriteLine("Error sending revision to Jira: {0}\n\n{1}",ex.Message,ex.StackTrace);
+					System.Console.WriteLine("Error sending revision to Jira [{4}]: {0}\n\n{1}\n\n[{2}]\n\nResult: {3}",
+						ex.Message,ex.StackTrace,JsonData,result,urlUpdate);
 				}
 			}
 			Console.WriteLine("Your comment posted. I think.");
