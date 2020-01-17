@@ -6,23 +6,36 @@ using System.Text;
 
 namespace Function
 {
-	public class Comment
+	public class CommentIn
 	{
 		public string issue { get; set; }
 		public string body { get; set; }
+		public string revision { get; set; }
+	}
+
+	public class CommentOut
+	{
+		public string issue { get; set; }
+		public string body { get; set; }
+	}
+	public class RevField
+	{
+		public string customfield_11700 { get; set; }
 	}
 	public class FunctionHandler
 	{
 		public void Handle(string input)
 		{
 			string URLTemplate="{0}/rest/api/2/issue/{1}/comment";
+			string UpdateURLTemplate="{0}/rest/api/latest/issue/{1}/";
+
 			string jiraURL;
 			string jiraUser;
 			string jiraPassword;
-			Comment cm=new Comment();
+			CommentIn cm=new CommentIn();
 			try
 			{
-				cm=JsonConvert.DeserializeObject<Comment>(input);
+				cm=JsonConvert.DeserializeObject<CommentIn>(input);
 				if(cm==null)throw new SystemException("Null parameter");
 			}
 			catch (Exception ex)
@@ -48,13 +61,28 @@ namespace Function
 			wc.Headers.Add("Content-Type","application/json");
 			try
 			{
-				wc.UploadString(String.Format(URLTemplate,jiraURL,cm.issue),JsonConvert.SerializeObject(cm));
+				CommentOut comment=new CommentOut{issue=cm.issue,body=cm.body};
+				wc.UploadString(String.Format(URLTemplate,jiraURL,cm.issue),JsonConvert.SerializeObject(comment));
 			}
 			catch (System.Exception ex)
 			{
 				System.Console.WriteLine("Error sending request: {0}\n\n{1}",ex.Message,ex.StackTrace);
 			}
 			
+			if(!String.IsNullOrEmpty(cm.revision))
+			{
+				RevField data=new RevField{customfield_11700=cm.revision};
+				try
+				{
+					string proj=cm.issue.Split('-')[0];
+					wc.Headers.Add("Project",proj);
+					wc.UploadString(String.Format(UpdateURLTemplate,jiraURL,cm.issue),"PUT",JsonConvert.SerializeObject(data));
+				}
+				catch (System.Exception ex)
+				{
+					System.Console.WriteLine("Error sending revision to Jira: {0}\n\n{1}",ex.Message,ex.StackTrace);
+				}
+			}
 			Console.WriteLine("Your comment posted. I think.");
 		}
 	}

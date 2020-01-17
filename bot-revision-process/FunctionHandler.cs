@@ -17,6 +17,8 @@ namespace Function
 			List<string> segments=new List<string>(input.Split(new string[] { delimiter }, StringSplitOptions.None));
 			string comment=(segments[3]??"").ToUpper();
 			string system=segments[0];
+			string revurl=segments[1].Replace("\n","").Replace("\r","").Trim();
+			string revision=revurl.Substring(revurl.LastIndexOf("/")).Replace("/","").Replace("r","");
 			bool hasIssue=comment.Contains("GA-")||comment.Contains("FRWK-")||comment.Contains("DEV-");
 			string files=segments.Count>=5?segments[4]:"";
 			if(hasIssue)
@@ -24,6 +26,7 @@ namespace Function
 				WebClient wc=new WebClient();
 				try
 				{
+					input=input.Replace(revurl,String.Format("{0}|{1}",revurl,revision));
 					wc.UploadData("http://gateway:8080/function/bot-revision-notice", Encoding.UTF8.GetBytes(input));
 					System.Console.WriteLine("We post a comment in Jira");
 				}

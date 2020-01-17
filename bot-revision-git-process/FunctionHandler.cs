@@ -36,7 +36,7 @@ namespace Function
 						message=String.Format(messageFormat,
 							repo,
 							delimiter,
-							String.Format("{0}/commit/{1}",post.resource.repository.remoteUrl,x.commitId),
+							String.Format("{0}/commit/{1}|{1}",post.resource.repository.remoteUrl,x.commitId),
 							delimiter,
 							x.author.name,
 							delimiter,

@@ -19,12 +19,18 @@ namespace Function
 			{
 				string system=cleanUp(segments[0]).Trim();
 				string revisionURL=cleanUp(segments[1]).Trim();
+				string revision=null;
+				if(revisionURL.Contains('|'))
+				{
+					revision=revisionURL.Split('|')[1];
+					revisionURL=revisionURL.Split('|')[0];
+				}
 				string author=cleanUp(segments[2]);
 				string files=procFiles(segments.Count>=5?segments[4]:"");
 				string commentHeader="{panel:title=Comment|borderStyle=dashed|borderColor=#ccc|titleBGColor=#F7D6C1|bgColor=#FFFFCE}";
 				string commentFooter="{panel}";
 				string RevisionText=String.Format("Update to: {0}\nRevision/Push by {2}.\nDetails: {1}\n\n{5}{3}{6}\nFiles:\n{4}",system,revisionURL,author,comment,files,commentHeader,commentFooter);
-				issues.ForEach(issue=>PostToJira(issue,RevisionText));
+				issues.ForEach(issue=>PostToJira(issue,RevisionText,revision));
 				System.Console.WriteLine("Posted");
 			}
 			else
@@ -49,13 +55,14 @@ namespace Function
 			}
 			return result;
 		}
-		void PostToJira(string issue,string comment)
+		void PostToJira(string issue,string comment, string rev)
 		{
 			using(WebClient wc=new WebClient())
 			{
 				Comment cm=new Comment();
 				cm.issue=issue;
 				cm.body=comment;
+				cm.revision=rev;
 				wc.UploadString("http://gateway:8080/function/bot-jira-comment",JsonConvert.SerializeObject(cm));
 			}
 		}
@@ -79,8 +86,9 @@ namespace Function
 	}
 
 	public class Comment
-        {
-                public string issue { get; set; }
-                public string body { get; set; }
-        }
+	{
+		public string issue { get; set; }
+		public string body { get; set; }
+		public string revision { get; set; }
+	}
 }
