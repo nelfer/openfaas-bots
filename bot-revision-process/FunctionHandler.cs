@@ -72,7 +72,7 @@ namespace Function
 				WebClient wc=new WebClient();
 				try
 				{
-					wc.DownloadData(String.Format("http://ngcjenkinsdev.eastus.cloudapp.azure.com/job/{0}-build/build?token={1}",repoName,token));
+					wc.DownloadData(String.Format("https://ngcjenkinsdev.eastus.cloudapp.azure.com/buildByToken/build?job={0}-build&token={1}",repoName,token));
 					System.Console.WriteLine("Will compile");
 				}
 				catch (System.Exception)
