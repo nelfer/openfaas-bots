@@ -25,7 +25,7 @@ namespace Function
 			{
 				string delimiter="SVNDELIMITERTEXT---- ";
 				string messageFormat="{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}";
-				post.resource.commits.OrderBy(y=>y.author.date).ToList().ForEach(x=>
+				post.resource?.commits?.OrderBy(y=>y.author.date).ToList().ForEach(x=>
 				{
 					string message=null;
 					try
