@@ -31,7 +31,7 @@ namespace Function
 				msgLines.RemoveAt(0);
 				string comments="";
 				msgLines.ForEach(x=>comments+=String.Format("{0}\n",x));
-				string fullCommnet=String.Format("{panel:title={0}|borderStyle=dashed|borderColor=#ccc|titleBGColor=#F7D6C1|bgColor=#FFFFCE}\n{1}\n{panel}",fline,comments);
+				string fullCommnet=String.Format("{{panel:title={0}|borderStyle=dashed|borderColor=#ccc|titleBGColor=#F7D6C1|bgColor=#FFFFCE}}\n{1}\n{{panel}}",fline,comments);
 				
 				List<string> issues=getIssues(origMessage);
 				if(issues.Count>0)
