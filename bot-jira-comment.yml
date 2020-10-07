@@ -11,3 +11,9 @@ functions:
       - JIRA-URL
       - JIRA-USER
       - JIRA-PASSWORD
+      - NGC-JIRA-URL
+      - NGC-JIRA-USER
+      - NGC-JIRA-PASSWORD
+      - ASI-JIRA-URL
+      - ASI-JIRA-USER
+      - ASI-JIRA-PASSWORD
