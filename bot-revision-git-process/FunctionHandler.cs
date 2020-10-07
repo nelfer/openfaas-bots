@@ -12,6 +12,7 @@ namespace Function
 	{
 		public void Handle(string input)
 		{
+			Request.SetContext(input);
 			TfsGitPost post=new TfsGitPost();
 			try
 			{
@@ -36,7 +37,7 @@ namespace Function
 				List<string> issues=getIssues(origMessage);
 				if(issues.Count>0)
 				{
-					issues.ForEach(issue=>PostToJira(issue,fullCommnet));
+					issues.ForEach(issue=>PostToJira(Request.QueryString["jira"],issue,fullCommnet));
 					System.Console.WriteLine("Posted");
 				}
 			}
@@ -62,13 +63,14 @@ namespace Function
 			return ret;
 		}
 
-		void PostToJira(string issue,string comment)
+		void PostToJira(string jira,string issue,string comment)
 		{
 			try
 			{
 				using(WebClient wc=new WebClient())
 				{
 					Comment cm=new Comment();
+					cm.jira=jira;
 					cm.issue=issue;
 					cm.body=comment;
 					wc.UploadString("http://gateway:8080/function/bot-jira-comment",JsonConvert.SerializeObject(cm));
@@ -82,6 +84,7 @@ namespace Function
 	}
 	public class Comment
 	{
+		public string jira { get; set; }
 		public string issue { get; set; }
 		public string body { get; set; }
 	}

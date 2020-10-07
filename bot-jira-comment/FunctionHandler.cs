@@ -8,6 +8,7 @@ namespace Function
 {
 	public class CommentIn
 	{
+		public string jira { get; set; }
 		public string issue { get; set; }
 		public string body { get; set; }
 		public string revision { get; set; }
@@ -50,9 +51,18 @@ namespace Function
 
 			try
 			{
-				jiraURL=File.ReadAllText("/var/openfaas/secrets/JIRA-URL");
-				jiraUser=File.ReadAllText("/var/openfaas/secrets/JIRA-USER");
-				jiraPassword=File.ReadAllText("/var/openfaas/secrets/JIRA-PASSWORD");
+				if(String.IsNullOrEmpty(cm.jira))
+				{
+					jiraURL=File.ReadAllText("/var/openfaas/secrets/JIRA-URL");
+					jiraUser=File.ReadAllText("/var/openfaas/secrets/JIRA-USER");
+					jiraPassword=File.ReadAllText("/var/openfaas/secrets/JIRA-PASSWORD");
+				}
+				else
+				{
+					jiraURL=File.ReadAllText(String.Format("/var/openfaas/secrets/{0}-JIRA-URL",cm.jira));
+					jiraUser=File.ReadAllText(String.Format("/var/openfaas/secrets/{0}-JIRA-USER",cm.jira));
+					jiraPassword=File.ReadAllText(String.Format("/var/openfaas/secrets/{0}-JIRA-PASSWORD",cm.jira));
+				}
 			}
 			catch (Exception ex)
 			{
