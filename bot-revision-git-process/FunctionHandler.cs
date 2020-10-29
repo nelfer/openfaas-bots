@@ -50,17 +50,14 @@ namespace Function
 		List<string> getIssues(string _comment)
 		{
 			List<string> ret=new List<string>();
-			if(!String.IsNullOrEmpty(_comment))
-			{
-				string pattern = @"[a-zA-Z][a-zA-Z0-9_]+-[1-9][0-9]*";
-				Regex rgx = new Regex(pattern);
+			string pattern = @"[a-zA-Z][a-zA-Z0-9_]+-[1-9][0-9]*";
+			Regex rgx = new Regex(pattern);
 				
-				foreach (Match match in rgx.Matches(_comment))
+			foreach (Match match in rgx.Matches(_comment))
+			{
+				if(!ret.Contains(match.Value))
 				{
-					if(!ret.Contains(match.Value))
-					{
-						ret.Add(match.Value);
-					}
+					ret.Add(match.Value);
 				}
 			}
 			return ret;
