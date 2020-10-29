@@ -34,7 +34,7 @@ namespace Function
 				msgLines.ForEach(x=>comments+=String.Format("{0}\n",x));
 				string fullCommnet=String.Format("{{panel:title={0}|borderStyle=dashed|borderColor=#ccc|titleBGColor=#F7D6C1|bgColor=#FFFFCE}}\n{1}\n{{panel}}",fline,comments);
 				
-				List<string> issues=getIssues(origMessage);
+				List<string> issues=getIssues(comments);
 				if(issues.Count>0)
 				{
 					issues.ForEach(issue=>PostToJira(Request.QueryString["jira"],issue,fullCommnet));
@@ -50,14 +50,17 @@ namespace Function
 		List<string> getIssues(string _comment)
 		{
 			List<string> ret=new List<string>();
-			string pattern = @"[a-zA-Z][a-zA-Z0-9_]+-[1-9][0-9]*";
-			Regex rgx = new Regex(pattern);
-			
-			foreach (Match match in rgx.Matches(_comment))
+			if(!String.IsNullOrEmpty(_comment))
 			{
-				if(!ret.Contains(match.Value))
+				string pattern = @"[a-zA-Z][a-zA-Z0-9_]+-[1-9][0-9]*";
+				Regex rgx = new Regex(pattern);
+				
+				foreach (Match match in rgx.Matches(_comment))
 				{
-					ret.Add(match.Value);
+					if(!ret.Contains(match.Value))
+					{
+						ret.Add(match.Value);
+					}
 				}
 			}
 			return ret;
